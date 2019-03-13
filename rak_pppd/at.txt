@@ -1,0 +1,19 @@
+This document can help you complete the gateway access internet.
+
+1.Use command minicon connect to the Rak2013
+	minicom -D /dev/ttyAMA0 -b 115200
+
+2.Input "at+cops=?" will list all current network operators in a few seconds, for example:
+	(2,"CHN-CT","CT","46011",7)
+  the second parameter "CHN-CT" is APN name, the last parameter "7" is access technology selected.
+  
+3.Input at+cops=1,0,APN_NAME,Access_technology_selected. forces an attempt to select and register the GSM/UMTS network operator, for example:
+	at+cops=1,0,"CHN-CT",7
+  
+4.exit minicom
+ 
+5.Use command "sudo gateway-config"
+
+6.Choose "Configure APN name", set the APN name for pppd
+ 
+7.Choose "Configure LTE Module", select "Enable LTE Module", set the module power on when the system os starts. 
