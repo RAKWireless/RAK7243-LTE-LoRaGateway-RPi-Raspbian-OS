@@ -12,6 +12,9 @@ This project currently provides support for the below platforms.
 * RAK7243 (with LTE)
 
 ##	Changelog
+2019-03-28 RAK V2.4R
+
+* User can modify the baud rate of the LTE module
 
 2019-03-19 RAK V2.3R
 

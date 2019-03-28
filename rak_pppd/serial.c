@@ -17,10 +17,10 @@
 *@param  speed  类型 int  串口速度
 *@return  void*/
 
-int speed_arr[] = { B115200, B38400, B19200, B9600, B4800, B2400, B1200, B300,
-	    B115200, B38400, B19200, B9600, B4800, B2400, B1200, B300, };
-int name_arr[] = {115200, 38400,  19200,  9600,  4800,  2400,  1200,  300,
-	    115200, 38400,  19200,  9600, 4800, 2400, 1200,  300, };
+int speed_arr[] = {B921600, B115200, B38400, B19200, B9600, B4800, B2400, B1200, B300,
+	    B921600, B115200, B38400, B19200, B9600, B4800, B2400, B1200, B300, };
+int name_arr[] = {921600, 115200, 38400,  19200,  9600,  4800,  2400,  1200,  300,
+	    921600, 115200, 38400,  19200,  9600, 4800, 2400, 1200,  300, };
 void set_speed(int fd, int speed)
 {
   int   i;
@@ -142,6 +142,8 @@ int	fd = open( Dev, O_RDWR | O_NONBLOCK);         //| O_NOCTTY | O_NDELAY
 /**
 *@breif 	main()
 */
+
+
 int main(int argc, char **argv)
 {
 	int fd;
@@ -149,42 +151,53 @@ int main(int argc, char **argv)
 	int nread;
 	char buff[512];
 	char *dev ="/dev/ttyAMA0";
-	fd = OpenDev(dev);
-	if (fd>0)
-    set_speed(fd,15200);
-	else
+	int band_speed = 0;
+	band_speed = atoi(argv[1]);
+	while(1)
+	{
+		fd = OpenDev(dev);
+		printf("open\n");
+		if (fd>0)
+			set_speed(fd, band_speed);
+		else
 		{
-		printf("Can't Open Serial Port!\n");
-		exit(0);
+			printf("Can't Open Serial Port!\n");
+			exit(0);
 		}
-  if (set_Parity(fd,8,1,'N')== FALSE)
-  {
-    printf("Set Parity Error\n");
-    exit(1);
-  }
-  while(1)
-  {
-	memset(buff, 0, 512);
-	strcat(buff, "AT\r");
-	nread = write(fd, buff, 3);
-	printf("write Len:%d\n", nread);
-	while((nread = read(fd,buff,512))>0)
-	{
-      		printf("\nLen %d\n",nread);
-      		buff[nread+1]='\0';
-      		printf("\n%s",buff);
-		tag = 1;
- 	}
-	if (1 == tag)
-	{
-		printf("1 == tag\n");
-		break;
+		if (set_Parity(fd,8,1,'N')== FALSE)
+		{
+			printf("Set Parity Error\n");
+			exit(1);
+		}
+		int loop_i = 0;
+		while(loop_i < 10)
+		{
+			loop_i++;
+			memset(buff, 0, 512);
+			strcat(buff, "AT\r");
+			nread = write(fd, buff, 3);
+			printf("write Len:%d\n", nread);
+			while((nread = read(fd,buff,512))>0)
+			{
+				printf("\nLen %d\n",nread);
+				buff[nread+1]='\0';
+				printf("\n%s",buff);
+				tag = 1;
+			}
+			if (1 == tag)
+			{
+				printf("1 == tag\n");
+				goto READ_AT_OK;
+			}
+			usleep(1000*1000);
+		}
+		close(fd);
 	}
-	usleep(1000*1000);
-  }
- // execl("/usr/sbin/pppd", "call gprs");
-    usleep(1000*1000*10);
+	
+READ_AT_OK:
+    usleep(1000*1000*3);
     system("pppd call gprs &");
-    //close(fd);
+    close(fd);
     //exit(0);
+    return 0;
 }

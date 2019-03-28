@@ -222,12 +222,12 @@ do_configure_wifi() {
 
 enable_2013()
 {
-    linenum=`sed -n '/enable_lte_module/=' /etc/rc.local`
+    linenum=`sed -n '/wait_pi_hat_and_ppp/=' /etc/rc.local`
 	if [ ! -n "$linenum" ]; then
 		set -a line_array
 		line_index=0
 		for linenum in `sed -n '/exit 0/=' /etc/rc.local`; do line_array[line_index]=$linenum; let line_index=line_index+1; done
-		sed -i "${line_array[${#line_array[*]} - 1]}i/opt/ttn-gateway/rak_pppd/enable_lte_module.sh" /etc/rc.local
+		sed -i "${line_array[${#line_array[*]} - 1]}i/opt/ttn-gateway/rak_pppd/wait_pi_hat_and_ppp.sh" /etc/rc.local
 	fi
 	dialog --title "Enable LTE Module" --msgbox "The LTE module will power on after the operating system starts." 5 70
 	do_main_menu
@@ -235,7 +235,7 @@ enable_2013()
 
 disable_2013()
 {
-    linenum=`sed -n '/enable_lte_module/=' /etc/rc.local`
+    linenum=`sed -n '/wait_pi_hat_and_ppp/=' /etc/rc.local`
 	if [ -n "$linenum" ]; then
 		sed  -i "${linenum}d" /etc/rc.local
 	fi
@@ -245,6 +245,7 @@ disable_2013()
 
 active_2013()
 {
+	/opt/ttn-gateway/rak_pppd/pi-hat.sh
 	/opt/ttn-gateway/rak_pppd/enable_lte_module.sh
 	declare -i PERCENT=0
     (
@@ -284,15 +285,30 @@ set_apn_name()
 {
 	rm /tmp/apn_name -rf
     mkfifo /tmp/apn_name
+    rm /tmp/band_speed -rf
+    mkfifo /tmp/band_speed
     dialog --title "APN Name" --nocancel --inputbox "APN Name:" 10 40 "HOLOGRAM" 2> /tmp/apn_name & 
+    dialog --title "Baud Speed" --nocancel --inputbox "Baud Speed:" 10 40 "115200" 2> /tmp/band_speed &
     RET=$?
 	
     if [ $RET -eq 1 ]; then
         do_main_menu
     elif [ $RET -eq 0 ]; then
         apn_name="$( cat /tmp/apn_name  )" 
-        /opt/ttn-gateway/rak_pppd/ppp-creator.sh "${apn_name}" ttyAMA0 >/dev/null
+        band_speed="$( cat /tmp/band_speed  )" 
+        /opt/ttn-gateway/rak_pppd/ppp-creator.sh "${apn_name}" ttyAMA0 ${band_speed} >/dev/null
+        echo "
+#!/bin/sh
+
+cd /opt/ttn-gateway/rak_pppd
+./pi-hat.sh &
+/opt/ttn-gateway/rak_pppd/enable_lte_module.sh
+sleep 5
+./wait_pi_hat_and_ppp ${band_speed} &
+        " >  /opt/ttn-gateway/rak_pppd/wait_pi_hat_and_ppp.sh
+        chmod 755 /opt/ttn-gateway/rak_pppd/wait_pi_hat_and_ppp.sh
         rm /tmp/apn_name -rf
+        rm /tmp/band_speed -rf
     fi
     do_main_menu
 }
@@ -325,4 +341,11 @@ do_main_menu() {
     fi
 }
 
+
+if [ $(id -u) -ne 0 ]; then
+  printf "Script must be run as root. Try 'sudo gateway-config'\n"
+  exit 1
+fi
+
 do_main_menu
+

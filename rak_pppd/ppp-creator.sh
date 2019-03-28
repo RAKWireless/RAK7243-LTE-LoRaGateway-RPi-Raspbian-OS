@@ -37,7 +37,7 @@ SAY \"\nGoodbay\n\"" > /etc/chatscripts/quectel-chat-disconnect
 
 echo "creating script file : /etc/ppp/peers/gprs"
 echo "
-/dev/$2 115200
+/dev/$2 $3
 # The chat script, customize your APN in this file
 connect 'chat -s -v -f /etc/chatscripts/quectel-chat-connect -T $1'
 # The close script
