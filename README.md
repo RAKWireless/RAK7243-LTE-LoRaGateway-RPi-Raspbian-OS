@@ -12,6 +12,10 @@ This project currently provides support for the below platforms.
 * RAK7243 (with LTE)
 
 ##	Changelog
+2019-04-25 RAK V2.6R
+
+* Add loraserver
+
 2019-03-28 RAK V2.4R
 
 * User can modify the baud rate of the LTE module

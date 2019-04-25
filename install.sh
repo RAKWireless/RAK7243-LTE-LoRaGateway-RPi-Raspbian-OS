@@ -156,6 +156,8 @@ cp config.txt /boot/config.txt
 
 echo "static domain_name_servers=8.8.8.8 223.5.5.5" >> /etc/dhcpcd.conf
 
+echo "Install loraserver"
+./loraserver_install
 
 echo "The system will reboot in 5 seconds..."
 sleep 5
