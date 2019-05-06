@@ -26,6 +26,13 @@ This project currently provides support for the below platforms.
 * I2C interface for GPS
 * LTE support
 
+##    Precompiled firmware image
+If you want to use the precompiled firmware image directly, please download the latest one from RAK website:
+https://www.rakwireless.com/en/download/LoRa/Pilot-Gateway-Pro-RAK7243#Firmware
+Please download the one named "RAK7243_LTE_...".
+Then you can burn it into SD card according this document:
+https://www.rakwireless.com/en/download/LoRa/Pilot-Gateway-Pro-RAK7243#Tool
+
 ##	Installation procedure
 
 step1 : Download and install [Raspbian Stretch LITE](https://www.raspberrypi.org/downloads/raspbian/) 
@@ -50,3 +57,7 @@ step5 : Now you have a running gateway after restart!
 step6 : If you have a sim card, you can config network selection for sim card, refers to RAK7243-LoRaGateway-RPi-Raspbian-OS/rak_ppp/at.txt:
 
 step7 (Optional):You can use the command "sudo gateway-config" to select other bands if your hardware supports.
+
+## How to use it?
+You can use this firmware according the document:
+https://www.rakwireless.com/en/download/LoRa/Pilot-Gateway-Pro-RAK7243#Application-Notes
