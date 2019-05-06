@@ -260,8 +260,8 @@ int lgw_gps_enable(char *tty_path, char *gps_family, speed_t target_brate, int *
                     0xB5, 0x62, /* UBX Sync Chars */
                     0x06, 0x01, /* CFG-MSG Class/ID */
                     0x08, 0x00, /* Payload length */
-                    0x01, 0x20, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, /* Enable NAV-TIMEGPS output on serial */
-                    0x32, 0x94 }; /* Checksum */
+                    0x01, 0x20, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, /* Enable NAV-TIMEGPS output on serial */
+                    0x31, 0x91 }; /* Checksum */
     ssize_t num_written;
 
     /* check input parameters */
@@ -357,11 +357,11 @@ int lgw_gps_enable(char *tty_path, char *gps_family, speed_t target_brate, int *
 
     /* Send UBX CFG NAV-TIMEGPS message to tell GPS module to output native GPS time */
     /* This is a binary message, serial port has to be properly configured to handle this */
+#endif
     num_written = write (gps_tty_dev, ubx_cmd_timegps, UBX_MSG_NAVTIMEGPS_LEN);
     if (num_written != UBX_MSG_NAVTIMEGPS_LEN) {
         DEBUG_MSG("ERROR: Failed to write on serial port (written=%d)\n", (int) num_written);
     }
-#endif
     /* get timezone info */
     tzset();
 
