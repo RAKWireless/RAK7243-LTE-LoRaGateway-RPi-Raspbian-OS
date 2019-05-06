@@ -12,6 +12,11 @@ This project currently provides support for the below platforms.
 * RAK7243 (with LTE)
 
 ##	Changelog
+
+2019-05-06 RAK V2.7R
+
+* Add AP mode
+
 2019-04-25 RAK V2.6R
 
 * Add loraserver

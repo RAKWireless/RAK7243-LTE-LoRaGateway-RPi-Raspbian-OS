@@ -20,7 +20,7 @@ fi
 
 GATEWAY_EUI=$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
 GATEWAY_EUI=${GATEWAY_EUI^^} 
-sed  -i "s/0000000000000888/$GATEWAY_EUI/g"  all.sql
+sed  -i "s/0000000000000888/$GATEWAY_EUI/g"  init_sql.sql
 
 apt list --upgradable
 
@@ -33,7 +33,7 @@ sudo -u postgres psql -c "create role loraserver_ns with login password 'dbpassw
 sudo -u postgres psql -c "create database loraserver_as with owner loraserver_as;"
 sudo -u postgres psql -c "create database loraserver_ns with owner loraserver_ns;;"
 sudo -u postgres psql loraserver_as -c "create extension pg_trgm;"
-sudo -u postgres psql -U postgres -f all.sql
+sudo -u postgres psql -U postgres -f init_sql.sql
 
 #3. install lora packages
 #3.1 install https requirements
