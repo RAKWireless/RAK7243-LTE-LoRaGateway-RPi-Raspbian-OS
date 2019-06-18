@@ -12,6 +12,12 @@ This project currently provides support for the below platforms.
 * RAK7243 (with LTE)
 
 ##	Changelog
+2019-06-18 RAK V2.8R
+
+* 1.After the network is disconnected, lora_pkt_fwd restarts
+* 2.Modify loraserver.toml for us915 and cn 470
+* 3.Streamlined local_conf.json files
+* 4.When ppp0 exists, the network is accessed by ppp0 by default
 
 2019-05-06 RAK V2.7R
 

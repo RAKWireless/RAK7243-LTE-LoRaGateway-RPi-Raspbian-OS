@@ -11,6 +11,6 @@ GATEWAY_EUI=$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\
 GATEWAY_EUI=${GATEWAY_EUI^^}
 
 
-VER=`cat /usr/bin/rak-version.txt`
+VER=`cat /usr/bin/gateway-version.txt`
 echo "Gateway ID:$GATEWAY_EUI"
 echo "rakwireless gateway 7243 version $VER"
