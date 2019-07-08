@@ -23,22 +23,20 @@ This document can help you complete the gateway access internet.
 change baud rate:
 1.Use command "sudo gateway-config", choose "Configure LTE Module", select "disable LTE Module", then reboot gateway
 
-2.Use command "sudo gateway-config", choose "Configure LTE Module", select "Active LTE Module"
-
-3.Use command minicon connect to the Rak2013
+2.Use command minicon connect to the Rak2013
 	minicom -D /dev/ttyAMA0 -b 115200
 
-4.Input "at+ipr=921600"
+3.Input "at+ipr=921600"
 
-5.exit minicom
+4.exit minicom
 
-6.Use command minicon connect to the Rak2013
+5.Use command minicon connect to the Rak2013
 	minicom -D /dev/ttyAMA0 -b 921600
 
-7.Input "at&w"
+6.Input "at&w"
 
-8.exit mimnicom
+7.exit mimnicom
 
-9.Use command "sudo gateway-config", Choose "Configure APN name", set the APN name and baud rate for pppd
+8.Use command "sudo gateway-config", Choose "Configure APN name", set the APN name and baud rate for pppd
 
-10.Choose "Configure LTE Module", select "Enable LTE Module", set the module power on when the system os starts. 
+9.Choose "Configure LTE Module", select "Enable LTE Module", set the module power on when the system os starts. 
